@@ -3,26 +3,31 @@
 > **A minimalist, high-performance photography portfolio platform.**
 > Built for photographers to showcase their work with elegance and speed.
 
-![Project Banner](https://images.unsplash.com/photo-1452587925148-ce544e77e70d?q=80&w=1200&auto=format&fit=crop)
+---
+
+<div align="center">
+
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![Cloudinary](https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white)](https://cloudinary.com/)
+
+</div>
+
+---
 
 ## ✨ Features
 
-- **🎨 Masonry Gallery**: Beautiful, responsive grid layout that respects original aspect ratios.
-- **⚡ Blazing Fast**: Built on Next.js 15 for optimal performance and SEO.
-- **🔐 User Accounts**: Secure Google Authentication via Firebase.
-- **☁️ Cloudinary Integration**: High-quality image hosting with automatic optimization.
-- **📱 Mobile Optimized**: Fully responsive design with a dedicated mobile experience.
-- **🛠️ Admin Dashboard**: Easy-to-use interface for uploading and managing photos.
-- **🏷️ EXIF Data**: Automatically extracts and displays camera settings (ISO, Aperture, Shutter Speed).
-
-## 🛠️ Tech Stack
-
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) + [Framer Motion](https://www.framer.com/motion/)
-- **Database**: [Firebase Firestore](https://firebase.google.com/)
-- **Auth**: [Firebase Authentication](https://firebase.google.com/docs/auth)
-- **Storage**: [Cloudinary](https://cloudinary.com/)
+| Feature | Description |
+| :--- | :--- |
+| **🎨 Masonry Gallery** | Beautiful, responsive grid layout that respects original aspect ratios. |
+| **⚡ Blazing Fast** | Built on Next.js 15 for optimal performance and SEO. |
+| **🔐 Secure Auth** | Google Authentication via Firebase for seamless user access. |
+| **☁️ Cloudinary** | High-quality image hosting with automatic optimization & compression. |
+| **📱 Mobile First** | Fully responsive design with a dedicated mobile experience. |
+| **🛠️ Admin Dashboard** | Easy-to-use interface for uploading and managing photos. |
+| **🏷️ EXIF Data** | Automatically extracts camera settings (ISO, Aperture, Shutter Speed). |
 
 ## 🚀 Getting Started
 
@@ -36,7 +41,7 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/SilentShutter.git
+   git clone https://github.com/RACHIT-KUSHWAHA/SilentShutter.git
    cd SilentShutter
    ```
 
@@ -71,4 +76,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by [Rachit Kushwaha](https://github.com/RACHIT-KUSHWAHA)
+<div align="center">
+  Made with ❤️ by <a href="https://github.com/RACHIT-KUSHWAHA">Rachit Kushwaha</a>
+</div>
