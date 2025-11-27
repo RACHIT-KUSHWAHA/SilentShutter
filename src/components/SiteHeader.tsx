@@ -27,7 +27,7 @@ export function SiteHeader() {
                         {!user && (
                             <Link
                                 href="/auth"
-                                className="hidden rounded-full bg-white px-4 py-2 text-sm font-bold text-black transition hover:bg-gray-200 sm:block"
+                                className="rounded-full bg-white px-3 py-1.5 text-xs font-bold text-black transition hover:bg-gray-200 sm:px-4 sm:py-2 sm:text-sm"
                             >
                                 Create Your Own Gallery
                             </Link>
