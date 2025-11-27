@@ -9,6 +9,7 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 const hasValidConfig = Object.values(firebaseConfig).every(Boolean);
@@ -21,6 +22,20 @@ const app =
 export const firestore = hasValidConfig ? getFirestore(app) : null;
 export const auth = hasValidConfig ? getAuth(app) : null;
 export const googleProvider = new GoogleAuthProvider();
+
+// Initialize Analytics (Client-side only)
+import { getAnalytics, isSupported } from "firebase/analytics";
+
+export let analytics: any = null;
+
+if (typeof window !== "undefined" && hasValidConfig) {
+  isSupported().then((supported) => {
+    if (supported) {
+      analytics = getAnalytics(app);
+    }
+  });
+}
+
 export const isFirebaseReady = Boolean(firestore);
 
 // Helper function to detect mobile devices
