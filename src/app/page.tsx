@@ -1,13 +1,9 @@
-import { getPhotos, getCategories } from "@/lib/db";
+import { getPhotos } from "@/lib/db";
 import { GalleryGrid } from "@/components/GalleryGrid";
-import { DatabaseSeeder } from "@/components/DatabaseSeeder";
 import { Aperture } from "lucide-react";
 
 export default async function Home() {
-  const [photos, categories] = await Promise.all([
-    getPhotos(),
-    getCategories()
-  ]);
+  const photos = await getPhotos();
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white">
@@ -21,13 +17,9 @@ export default async function Home() {
       </header>
 
       <main className="mx-auto max-w-6xl px-3 pb-10 sm:px-6">
-        <GalleryGrid photos={photos} categories={categories} />
+        <GalleryGrid photos={photos} />
       </main>
-      <DatabaseSeeder />
     </div>
   );
 }
-<DatabaseSeeder />
-    </div >
-  );
-}
+

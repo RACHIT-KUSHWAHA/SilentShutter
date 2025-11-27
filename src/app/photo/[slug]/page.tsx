@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPhotos, getPhotoBySlug } from "@/lib/db";
 import type { PhotoEntry } from "@/types/photos";
-import { RatingButton } from "@/components/RatingButton";
+
 import { ArrowLeft, Camera, MapPin, Calendar } from "lucide-react";
 
 interface PhotoPageProps {
@@ -64,8 +64,8 @@ export default async function PhotoPage({ params }: PhotoPageProps) {
       </div>
 
       <main className="relative mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6 lg:py-16">
-        <Link 
-          href="/" 
+        <Link
+          href="/"
           className="group inline-flex items-center gap-2 text-sm font-medium text-white/60 transition hover:text-white"
         >
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition group-hover:bg-white/10">
@@ -89,7 +89,7 @@ export default async function PhotoPage({ params }: PhotoPageProps) {
                 priority
               />
             </div>
-            
+
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold leading-tight sm:text-4xl">{photo.title}</h1>
@@ -108,7 +108,7 @@ export default async function PhotoPage({ params }: PhotoPageProps) {
                   )}
                 </div>
               </div>
-              <RatingButton photoId={photo.id} initialScore={photo.initialScore} />
+
             </div>
           </div>
 
@@ -128,7 +128,7 @@ export default async function PhotoPage({ params }: PhotoPageProps) {
                 <Camera className="h-5 w-5 text-emerald-400" />
                 <h3 className="text-sm font-bold uppercase tracking-widest text-white/40">Technical Specs</h3>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-x-4 gap-y-8">
                 {metadataKeys
                   .map((entry) => ({

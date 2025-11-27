@@ -6,12 +6,17 @@ import { photoCollection, categories } from "@/data/photos";
 
 const PHOTOS_COLLECTION = "photos";
 
-export async function getPhotos(): Promise<PhotoEntry[]> {
+export async function getPhotos(userId?: string): Promise<PhotoEntry[]> {
   if (!firestore) return photoCollection;
 
   try {
-    const photosRef = collection(firestore, PHOTOS_COLLECTION);
-    const snapshot = await getDocs(photosRef);
+    let q;
+    if (userId) {
+      q = query(collection(firestore, PHOTOS_COLLECTION), where("userId", "==", userId));
+    } else {
+      q = collection(firestore, PHOTOS_COLLECTION);
+    }
+    const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
       return photoCollection;
@@ -157,5 +162,21 @@ export async function getOrphanedPhotos() {
   } catch (error) {
     console.error("Error fetching orphaned photos:", error);
     return [];
+  }
+}
+
+export async function claimOrphanedPhotos(userId: string) {
+  const db = firestore;
+  if (!db) return 0;
+  try {
+    const orphans = await getOrphanedPhotos();
+    const promises = orphans.map(photo =>
+      updateDoc(doc(db, "photos", photo.id), { userId })
+    );
+    await Promise.all(promises);
+    return orphans.length;
+  } catch (error) {
+    console.error("Error claiming photos:", error);
+    return 0;
   }
 }

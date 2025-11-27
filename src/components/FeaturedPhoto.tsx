@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PhotoEntry } from "@/types/photos";
-import { RatingButton } from "./RatingButton";
+
 
 export const FeaturedPhoto = ({ photo }: { photo: PhotoEntry }) => {
   return (
@@ -45,7 +45,7 @@ export const FeaturedPhoto = ({ photo }: { photo: PhotoEntry }) => {
           </div>
 
           <div className="flex flex-wrap items-center gap-5">
-            <RatingButton photoId={photo.id} initialScore={photo.initialScore} />
+
             <Link
               href={`/photo/${photo.slug}`}
               className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-black transition hover:bg-emerald-400"
