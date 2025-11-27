@@ -4,7 +4,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPhotos, getPhotoBySlug } from "@/lib/db";
 import type { PhotoEntry } from "@/types/photos";
-import { RatingButton } from "@/components/RatingButton";
 import { ArrowLeft, Camera, MapPin, Calendar } from "lucide-react";
 
 interface PhotoPageProps {
@@ -108,7 +107,6 @@ export default async function PhotoPage({ params }: PhotoPageProps) {
                   )}
                 </div>
               </div>
-              <RatingButton photoId={photo.id} initialScore={photo.initialScore} />
             </div>
           </div>
 
