@@ -25,7 +25,7 @@ export function CategoryManager({
         // We need to update addCategory to accept userId instead of password
         // Or just use the db function directly since we are on client and have auth
         try {
-            await addCategoryToDb(newCategory, user.uid);
+            await addCategoryToDb(newCategory);
             setNewCategory("");
         } catch (error) {
             console.error("Failed to add category", error);
