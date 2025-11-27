@@ -10,6 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { getUserSettings } from "@/lib/db";
 import Link from "next/link";
 import exifr from 'exifr';
+import imageCompression from 'browser-image-compression';
 
 export function UploadForm({
     categories
@@ -94,6 +95,8 @@ export function UploadForm({
         }
     };
 
+
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!user || !userSettings?.cloudinaryCloudName || !userSettings?.cloudinaryUploadPreset) {
@@ -106,12 +109,31 @@ export function UploadForm({
         setMessage("");
 
         const formData = new FormData(e.currentTarget);
-        const file = formData.get("file") as File;
+        let file = formData.get("file") as File;
         const title = formData.get("title") as string;
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
         const folder = formData.get("category") as string || "uploads";
 
         try {
+            // Compress image if larger than 1MB
+            if (file.size > 1024 * 1024) {
+                console.log(`Original file size: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+                const options = {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    useWebWorker: true,
+                    fileType: file.type as string
+                };
+                try {
+                    const compressedFile = await imageCompression(file, options);
+                    console.log(`Compressed file size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`);
+                    file = compressedFile;
+                } catch (error) {
+                    console.error("Compression failed:", error);
+                    // Continue with original file if compression fails, though it might fail upload
+                }
+            }
+
             // 1. Upload Image to Cloudinary (Client-side)
             const uploadFormData = new FormData();
             uploadFormData.append("file", file);
