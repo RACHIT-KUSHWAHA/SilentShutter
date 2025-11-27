@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { PhotoEntry } from "@/types/photos";
 
@@ -37,24 +37,37 @@ export const FeaturedPhoto = ({ photo }: { photo: PhotoEntry }) => {
               <p className="text-[10px] uppercase tracking-widest text-white/40">Location</p>
               <p className="mt-1 text-sm font-medium text-white">{photo.metadata.location}</p>
             </div>
-          </Link>
+            <div>
+              <p className="text-[10px] uppercase tracking-widest text-white/40">Camera</p>
+              <p className="mt-1 text-sm font-medium text-white">{photo.metadata.camera}</p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-5">
+            <Link
+              href={`/photo/${photo.slug}`}
+              className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-black transition hover:bg-emerald-400"
+            >
+              <span>Read the story</span>
+              <span className="transition-transform group-hover:translate-x-1">→</span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="relative aspect-[4/5] overflow-hidden rounded-3xl lg:aspect-square">
+          <Image
+            src={photo.image.url}
+            alt={photo.title}
+            fill
+            className="object-cover transition duration-700 hover:scale-105"
+            placeholder="blur"
+            blurDataURL={photo.image.placeholder}
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            priority
+          />
+          <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl" />
         </div>
       </div>
-
-      <div className="relative aspect-[4/5] overflow-hidden rounded-3xl lg:aspect-square">
-        <Image
-          src={photo.image.url}
-          alt={photo.title}
-          fill
-          className="object-cover transition duration-700 hover:scale-105"
-          placeholder="blur"
-          blurDataURL={photo.image.placeholder}
-          sizes="(min-width: 1024px) 45vw, 100vw"
-          priority
-        />
-        <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-3xl" />
-      </div>
-    </div>
-    </section >
+    </section>
   );
 };
