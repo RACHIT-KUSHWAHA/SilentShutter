@@ -26,7 +26,7 @@ export function AdminDashboard() {
             setIsLoadingData(true);
             try {
                 const [userCategories, userPhotos] = await Promise.all([
-                    getCategories(user.uid),
+                    getCategories(),
                     getPhotos(user.uid)
                 ]);
                 setCategories(userCategories);
