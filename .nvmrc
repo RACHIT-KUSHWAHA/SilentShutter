@@ -1,1 +1,1 @@
-echo "20.9.0"
+printf "20.9.0\n" > .nvmrc
