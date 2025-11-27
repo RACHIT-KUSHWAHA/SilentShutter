@@ -172,8 +172,9 @@ export async function claimOrphanedPhotos(userId: string): Promise<number> {
   if (!firestore) throw new Error("Database not connected");
   try {
     const orphans = await getOrphanedPhotos();
+    const db = firestore; // Store reference to avoid null check issues
     const promises = orphans.map(photo =>
-      updateDoc(doc(firestore, PHOTOS_COLLECTION, photo.id), { userId })
+      updateDoc(doc(db, PHOTOS_COLLECTION, photo.id), { userId })
     );
     await Promise.all(promises);
     return orphans.length;
