@@ -73,5 +73,5 @@ export function HomeGallery({ initialUserId }: { initialUserId?: string }) {
         }
     }
 
-    return <GalleryGrid photos={photos} categories={categories} />;
+    return <GalleryGrid photos={photos} />;
 }
