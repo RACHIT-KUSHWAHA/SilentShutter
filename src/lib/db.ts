@@ -1,10 +1,25 @@
-/* eslint-disable */
 import { collection, getDocs, query, where, doc, setDoc, deleteDoc, updateDoc, getDoc } from "firebase/firestore";
 import { firestore } from "./firebase";
-import { PhotoEntry, UserSettings } from "@/types/photos";
+import { PhotoEntry } from "@/types/photos";
 import { photoCollection, categories } from "@/data/photos";
 
 const PHOTOS_COLLECTION = "photos";
+const USERS_COLLECTION = "users";
+
+export async function getUserSettings(userId: string): Promise<any | null> {
+  if (!firestore) return null;
+  try {
+    const docRef = doc(firestore, USERS_COLLECTION, userId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching user settings:", error);
+    return null;
+  }
+}
 
 export async function getPhotos(userId?: string): Promise<PhotoEntry[]> {
   if (!firestore) return photoCollection;
@@ -16,9 +31,14 @@ export async function getPhotos(userId?: string): Promise<PhotoEntry[]> {
     } else {
       q = collection(firestore, PHOTOS_COLLECTION);
     }
+
     const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
+      // If searching for a specific user and found nothing, return empty array
+      if (userId) return [];
+
+      // Fallback to mock data only for public view if DB is empty
       return photoCollection;
     }
 
@@ -56,6 +76,7 @@ export async function seedPhotos() {
     return;
   }
 
+  const photosRef = collection(db, PHOTOS_COLLECTION);
   console.log("Seeding photos...");
   const promises = photoCollection.map(photo =>
     setDoc(doc(db, PHOTOS_COLLECTION, photo.id), photo, { merge: true })
@@ -112,71 +133,8 @@ export async function deleteCategoryFromDb(id: string) {
   await deleteDoc(doc(firestore, CATEGORIES_COLLECTION, id));
 }
 
-
-export async function getUserSettings(userId: string): Promise<UserSettings | null> {
-  if (!firestore) return null;
-  try {
-    const docRef = doc(firestore, "users", userId);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data() as UserSettings;
-    }
-    return null;
-  } catch (error) {
-    console.error("Error fetching user settings:", error);
-    return null;
-  }
-}
-
-export async function getUserByUsername(username: string): Promise<{ uid: string, settings: UserSettings } | null> {
-  if (!firestore) return null;
-  try {
-    const usersRef = collection(firestore, "users");
-    const q = query(usersRef, where("username", "==", username));
-    const snapshot = await getDocs(q);
-
-    if (!snapshot.empty) {
-      const doc = snapshot.docs[0];
-      return { uid: doc.id, settings: doc.data() as UserSettings };
-    }
-    return null;
-  } catch (error) {
-    console.error("Error fetching user by username:", error);
-    return null;
-  }
-}
-
 export async function deletePhotoFromDb(id: string) {
   if (!firestore) throw new Error("Database not connected");
-  await deleteDoc(doc(firestore, "photos", id));
+  await deleteDoc(doc(firestore, PHOTOS_COLLECTION, id));
 }
 
-export async function getOrphanedPhotos() {
-  if (!firestore) return [];
-  try {
-    const photosRef = collection(firestore, "photos");
-    const snapshot = await getDocs(photosRef);
-    return snapshot.docs
-      .map(doc => doc.data() as PhotoEntry)
-      .filter(photo => !photo.userId);
-  } catch (error) {
-    console.error("Error fetching orphaned photos:", error);
-    return [];
-  }
-}
-
-export async function claimOrphanedPhotos(userId: string) {
-  const db = firestore;
-  if (!db) return 0;
-  try {
-    const orphans = await getOrphanedPhotos();
-    const promises = orphans.map(photo =>
-      updateDoc(doc(db, "photos", photo.id), { userId })
-    );
-    await Promise.all(promises);
-    return orphans.length;
-  } catch (error) {
-    console.error("Error claiming photos:", error);
-    return 0;
-  }
-}

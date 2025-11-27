@@ -31,11 +31,10 @@ export const GalleryGrid = ({ photos }: { photos: PhotoEntry[] }) => {
             <button
               key={filter}
               type="button"
-              className={`relative rounded-full px-5 py-2.5 text-sm font-bold uppercase tracking-wide transition-all ${
-                isActive
+              className={`relative rounded-full px-5 py-2.5 text-sm font-bold uppercase tracking-wide transition-all ${isActive
                   ? "text-black"
                   : "text-white/60 hover:text-white"
-              }`}
+                }`}
               onClick={() => {
                 setActiveTag(filter);
                 setVisibleCount(PAGE_SIZE);
@@ -58,9 +57,9 @@ export const GalleryGrid = ({ photos }: { photos: PhotoEntry[] }) => {
         })}
       </div>
 
-      <motion.div 
+      <motion.div
         layout
-        className="grid gap-8 md:grid-cols-2 xl:grid-cols-3"
+        className="columns-1 md:columns-2 xl:columns-3 gap-8 space-y-8"
       >
         <AnimatePresence mode="popLayout">
           {filteredPhotos.slice(0, visibleCount).map((photo) => (
@@ -71,6 +70,7 @@ export const GalleryGrid = ({ photos }: { photos: PhotoEntry[] }) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
+              className="break-inside-avoid mb-8"
             >
               <PhotoCard photo={photo} />
             </motion.div>

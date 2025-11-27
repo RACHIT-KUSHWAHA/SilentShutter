@@ -25,7 +25,7 @@ export default function AuthPage() {
             try {
                 const user = await handleRedirectResult();
                 if (user) {
-                    router.push("/");
+                    router.push("/admin");
                 }
             } catch (err: any) {
                 if (err.code !== 'auth/popup-closed-by-user') {
@@ -45,7 +45,7 @@ export default function AuthPage() {
             const user = await signInWithGoogle();
             // For desktop popup, user will be returned immediately
             if (user) {
-                router.push("/");
+                router.push("/admin");
             }
             // For mobile redirect, user will be null and redirect will happen
         } catch (err) {
@@ -72,7 +72,7 @@ export default function AuthPage() {
             } else {
                 await signUpWithEmail(email, password);
             }
-            router.push("/");
+            router.push("/admin");
         } catch (err: any) {
             console.error(err);
             if (err.code === 'auth/email-already-in-use') {

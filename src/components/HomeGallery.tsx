@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { getPhotos } from "@/lib/db";
+import { getPhotos, getCategories } from "@/lib/db";
 import { GalleryGrid } from "@/components/GalleryGrid";
-import { PhotoEntry } from "@/types/photos";
+import { PhotoEntry, CategoryEntry } from "@/types/photos";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
 export function HomeGallery({ initialUserId }: { initialUserId?: string }) {
     const { user, loading: authLoading } = useAuth();
     const [photos, setPhotos] = useState<PhotoEntry[]>([]);
-
+    const [categories, setCategories] = useState<CategoryEntry[]>([]);
     const [loadingData, setLoadingData] = useState(true);
 
     useEffect(() => {
@@ -25,8 +25,13 @@ export function HomeGallery({ initialUserId }: { initialUserId?: string }) {
 
                 const targetUserId = initialUserId || user?.uid;
 
-                const fetchedPhotos = await getPhotos(targetUserId);
+                const [fetchedPhotos, fetchedCategories] = await Promise.all([
+                    getPhotos(targetUserId),
+                    getCategories(targetUserId)
+                ]);
+
                 setPhotos(fetchedPhotos);
+                setCategories(fetchedCategories);
             } catch (error) {
                 console.error("Failed to fetch data", error);
             } finally {
@@ -68,5 +73,5 @@ export function HomeGallery({ initialUserId }: { initialUserId?: string }) {
         }
     }
 
-    return <GalleryGrid photos={photos} />;
+    return <GalleryGrid photos={photos} categories={categories} />;
 }

@@ -7,7 +7,7 @@ import { UploadForm } from "./UploadForm";
 import { PhotoList } from "./PhotoList";
 import { CategoryManager } from "./CategoryManager";
 import { useAuth } from "@/context/AuthContext";
-import { getCategories, getPhotos, getOrphanedPhotos, claimOrphanedPhotos } from "@/lib/db";
+import { getCategories, getPhotos } from "@/lib/db";
 
 type Tab = "upload" | "library" | "folders";
 
@@ -26,7 +26,7 @@ export function AdminDashboard() {
             setIsLoadingData(true);
             try {
                 const [userCategories, userPhotos] = await Promise.all([
-                    getCategories(),
+                    getCategories(user.uid),
                     getPhotos(user.uid)
                 ]);
                 setCategories(userCategories);
@@ -34,6 +34,7 @@ export function AdminDashboard() {
 
                 // Check for orphaned photos (only for the owner)
                 if (user.email === "kushwaharachit80@gmail.com") {
+                    const { getOrphanedPhotos } = await import("@/lib/db");
                     const orphans = await getOrphanedPhotos();
                     setOrphanedCount(orphans.length);
                 }
@@ -53,6 +54,7 @@ export function AdminDashboard() {
         if (!user) return;
         setIsLoadingData(true);
         try {
+            const { claimOrphanedPhotos } = await import("@/lib/db");
             const count = await claimOrphanedPhotos(user.uid);
             alert(`Successfully claimed ${count} photos!`);
             window.location.reload(); // Reload to see changes

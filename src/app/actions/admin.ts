@@ -1,9 +1,7 @@
-/* eslint-disable */
 "use server";
 
 import { v2 as cloudinary } from "cloudinary";
 import { addCategoryToDb, deleteCategoryFromDb } from "@/lib/db";
-import { PhotoEntry } from "@/types/photos";
 import { doc, deleteDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "@/lib/firebase";
 import { revalidatePath } from "next/cache";
@@ -40,7 +38,7 @@ export async function deletePhoto(id: string, publicId: string, password: string
         return { success: true };
     } catch (error: any) {
         console.error("Delete failed:", error);
-        return { error: (error as Error).message };
+        return { error: error.message };
     }
 }
 
@@ -52,7 +50,7 @@ export async function addCategory(name: string, password: string) {
         revalidatePath("/");
         return { success: true };
     } catch (error: any) {
-        return { error: (error as Error).message };
+        return { error: error.message };
     }
 }
 
@@ -64,11 +62,11 @@ export async function deleteCategory(id: string, password: string) {
         revalidatePath("/");
         return { success: true };
     } catch (error: any) {
-        return { error: (error as Error).message };
+        return { error: error.message };
     }
 }
 
-export async function updatePhoto(id: string, data: Partial<PhotoEntry>, password: string) {
+export async function updatePhoto(id: string, data: any, password: string) {
     try {
         checkAuth(password);
         if (!firestore) throw new Error("Database not connected");
@@ -77,7 +75,7 @@ export async function updatePhoto(id: string, data: Partial<PhotoEntry>, passwor
         revalidatePath("/");
         revalidatePath("/admin");
         return { success: true };
-    } catch (error: unknown) {
-        return { error: (error as Error).message };
+    } catch (error: any) {
+        return { error: error.message };
     }
 }
