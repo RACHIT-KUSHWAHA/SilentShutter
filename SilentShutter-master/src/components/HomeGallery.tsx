@@ -27,7 +27,7 @@ export function HomeGallery({ initialUserId }: { initialUserId?: string }) {
 
                 const [fetchedPhotos, fetchedCategories] = await Promise.all([
                     getPhotos(targetUserId),
-                    getCategories(targetUserId)
+                    getCategories()
                 ]);
 
                 setPhotos(fetchedPhotos);
@@ -73,5 +73,5 @@ export function HomeGallery({ initialUserId }: { initialUserId?: string }) {
         }
     }
 
-    return <GalleryGrid photos={photos} categories={categories} />;
+    return <GalleryGrid photos={photos} />;
 }

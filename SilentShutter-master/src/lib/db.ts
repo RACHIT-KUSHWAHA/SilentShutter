@@ -21,6 +21,21 @@ export async function getUserSettings(userId: string): Promise<any | null> {
   }
 }
 
+export async function getUserByUsername(username: string): Promise<any | null> {
+  if (!firestore) return null;
+  try {
+    const q = query(collection(firestore, USERS_COLLECTION), where("username", "==", username));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      return snapshot.docs[0].data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching user by username:", error);
+    return null;
+  }
+}
+
 export async function getPhotos(userId?: string): Promise<PhotoEntry[]> {
   if (!firestore) return photoCollection;
 
@@ -138,3 +153,32 @@ export async function deletePhotoFromDb(id: string) {
   await deleteDoc(doc(firestore, PHOTOS_COLLECTION, id));
 }
 
+export async function getOrphanedPhotos(): Promise<PhotoEntry[]> {
+  if (!firestore) return [];
+  try {
+    const q = query(
+      collection(firestore, PHOTOS_COLLECTION),
+      where("userId", "==", null)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data() as PhotoEntry);
+  } catch (error) {
+    console.error("Error fetching orphaned photos:", error);
+    return [];
+  }
+}
+
+export async function claimOrphanedPhotos(userId: string): Promise<number> {
+  if (!firestore) throw new Error("Database not connected");
+  try {
+    const orphans = await getOrphanedPhotos();
+    const promises = orphans.map(photo =>
+      updateDoc(doc(firestore, PHOTOS_COLLECTION, photo.id), { userId })
+    );
+    await Promise.all(promises);
+    return orphans.length;
+  } catch (error) {
+    console.error("Error claiming orphaned photos:", error);
+    throw error;
+  }
+}

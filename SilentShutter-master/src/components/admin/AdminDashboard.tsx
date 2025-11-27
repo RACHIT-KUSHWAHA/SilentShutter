@@ -11,11 +11,16 @@ import { getCategories, getPhotos } from "@/lib/db";
 
 type Tab = "upload" | "library" | "folders";
 
-export function AdminDashboard() {
+interface AdminDashboardProps {
+    categories?: CategoryEntry[];
+    photos?: PhotoEntry[];
+}
+
+export function AdminDashboard({ categories: initialCategories = [], photos: initialPhotos = [] }: AdminDashboardProps = {}) {
     const { user, loading } = useAuth();
     const [activeTab, setActiveTab] = useState<Tab>("upload");
-    const [categories, setCategories] = useState<CategoryEntry[]>([]);
-    const [photos, setPhotos] = useState<PhotoEntry[]>([]);
+    const [categories, setCategories] = useState<CategoryEntry[]>(initialCategories);
+    const [photos, setPhotos] = useState<PhotoEntry[]>(initialPhotos);
     const [isLoadingData, setIsLoadingData] = useState(false);
 
     const [orphanedCount, setOrphanedCount] = useState(0);
@@ -26,7 +31,7 @@ export function AdminDashboard() {
             setIsLoadingData(true);
             try {
                 const [userCategories, userPhotos] = await Promise.all([
-                    getCategories(user.uid),
+                    getCategories(),
                     getPhotos(user.uid)
                 ]);
                 setCategories(userCategories);
