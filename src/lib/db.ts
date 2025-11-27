@@ -153,3 +153,33 @@ export async function deletePhotoFromDb(id: string) {
   await deleteDoc(doc(firestore, PHOTOS_COLLECTION, id));
 }
 
+export async function getOrphanedPhotos(): Promise<PhotoEntry[]> {
+  if (!firestore) return [];
+  try {
+    const q = query(
+      collection(firestore, PHOTOS_COLLECTION),
+      where("userId", "==", null)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => doc.data() as PhotoEntry);
+  } catch (error) {
+    console.error("Error fetching orphaned photos:", error);
+    return [];
+  }
+}
+
+export async function claimOrphanedPhotos(userId: string): Promise<number> {
+  if (!firestore) throw new Error("Database not connected");
+  try {
+    const orphans = await getOrphanedPhotos();
+    const db = firestore; // Store reference to avoid null check issues
+    const promises = orphans.map(photo =>
+      updateDoc(doc(db, PHOTOS_COLLECTION, photo.id), { userId })
+    );
+    await Promise.all(promises);
+    return orphans.length;
+  } catch (error) {
+    console.error("Error claiming orphaned photos:", error);
+    throw error;
+  }
+}
