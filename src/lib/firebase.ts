@@ -12,7 +12,9 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-const hasValidConfig = Object.values(firebaseConfig).every(Boolean);
+const hasValidConfig = Object.entries(firebaseConfig)
+  .filter(([key]) => key !== 'measurementId')
+  .every(([, value]) => Boolean(value));
 
 const app =
   hasValidConfig && getApps().length === 0
