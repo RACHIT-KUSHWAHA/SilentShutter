@@ -21,6 +21,21 @@ export async function getUserSettings(userId: string): Promise<any | null> {
   }
 }
 
+export async function getUserByUsername(username: string): Promise<any | null> {
+  if (!firestore) return null;
+  try {
+    const q = query(collection(firestore, USERS_COLLECTION), where("username", "==", username));
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+      return snapshot.docs[0].data();
+    }
+    return null;
+  } catch (error) {
+    console.error("Error fetching user by username:", error);
+    return null;
+  }
+}
+
 export async function getPhotos(userId?: string): Promise<PhotoEntry[]> {
   if (!firestore) return photoCollection;
 
